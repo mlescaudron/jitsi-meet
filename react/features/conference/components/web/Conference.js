@@ -102,6 +102,16 @@ class Conference extends AbstractConference<Props, *> {
     _onShowToolbar: Function;
     _originalOnShowToolbar: Function;
 
+
+    state = {
+        inviteURL: "",
+        phoneNumber: "",
+        pin: "",
+        logoImgURL: "",
+        logoLink: "",
+        title: "",
+    }
+
     /**
      * Initializes a new Conference instance.
      *
@@ -135,6 +145,7 @@ class Conference extends AbstractConference<Props, *> {
     componentDidMount() {
         document.title = `${this.props._roomName} | ${interfaceConfig.APP_NAME}`;
         this._start();
+
         if (this.props._roomName) {
             this.getProperState();
         }
@@ -153,12 +164,12 @@ class Conference extends AbstractConference<Props, *> {
             timeout: 60000,
         });
         this.setState({
-            inviteURL: res.data.inviteURL,
-            phoneNumber: res.data.phoneNumber,
-            pin: res.data.pin,
-            logoImgURL: res.data.logoImgURL,
-            logoLink: res.data.logoLink,
-            title: res.data.title,
+            inviteURL: res?.data?.inviteURL,
+            phoneNumber: res?.data?.phoneNumber,
+            pin: res?.data?.pin,
+            logoImgURL: res?.data?.logoImgURL,
+            logoLink: res?.data?.logoLink,
+            title: res?.data?.title,
         });
     }
 
