@@ -244,7 +244,7 @@ class InfoDialog extends Component<Props, State> {
                         <span className = 'info-value'>
                             <a
                                 className = 'info-dialog-url-text info-dialog-url-text-unselectable'
-                                href = { this.props._inviteURL }
+                                href = { this.props.__inviteURL }
                                 onClick = { this._onClickURLText } >
                                 { decodeURI(this._getURLToDisplay()) }
                             </a>
@@ -487,8 +487,8 @@ class InfoDialog extends Component<Props, State> {
         return (
             <div>
                 <DialInNumber
-                    conferenceID = { this.props.dialIn.conferenceID }
-                    phoneNumber = { this.state.phoneNumber } />
+                    conferenceID = { this.props.__pin }
+                    phoneNumber = { this.props.__phoneNumber } />
                 <a
                     className = 'more-numbers'
                     href = {

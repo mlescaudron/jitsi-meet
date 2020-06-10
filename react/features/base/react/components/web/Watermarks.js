@@ -1,9 +1,9 @@
 /* @flow */
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { translate } from '../../../i18n';
-import { connect } from '../../../redux';
+import { translate } from "../../../i18n";
+import { connect } from "../../../redux";
 
 declare var interfaceConfig: Object;
 
@@ -13,14 +13,13 @@ declare var interfaceConfig: Object;
  * @private
  */
 const _RIGHT_WATERMARK_STYLE = {
-    backgroundImage: 'url(images/rightwatermark.png)'
+    backgroundImage: "url(images/rightwatermark.png)",
 };
 
 /**
  * The type of the React {@code Component} props of {@link Watermarks}.
  */
 type Props = {
-
     /**
      * Whether or not the current user is logged in through a JWT.
      */
@@ -29,14 +28,13 @@ type Props = {
     /**
      * Invoked to obtain translated strings.
      */
-    t: Function
+    t: Function,
 };
 
 /**
  * The type of the React {@code Component} state of {@link Watermarks}.
  */
 type State = {
-
     /**
      * The url to open when clicking the brand watermark.
      */
@@ -66,7 +64,7 @@ type State = {
     /**
      * Whether or not the show the "powered by Jitsi.org" link.
      */
-    showPoweredBy: boolean
+    showPoweredBy: boolean,
 };
 
 /**
@@ -94,20 +92,22 @@ class Watermarks extends Component<Props, State> {
         } else {
             showBrandWatermark = interfaceConfig.SHOW_BRAND_WATERMARK;
             showJitsiWatermark = interfaceConfig.SHOW_JITSI_WATERMARK;
-            showJitsiWatermarkForGuests
-                = interfaceConfig.SHOW_WATERMARK_FOR_GUESTS;
+            showJitsiWatermarkForGuests =
+                interfaceConfig.SHOW_WATERMARK_FOR_GUESTS;
         }
 
         this.state = {
-            brandWatermarkLink:
-                showBrandWatermark ? interfaceConfig.BRAND_WATERMARK_LINK : '',
+            brandWatermarkLink: showBrandWatermark
+                ? interfaceConfig.BRAND_WATERMARK_LINK
+                : "",
             jitsiWatermarkLink:
                 showJitsiWatermark || showJitsiWatermarkForGuests
-                    ? interfaceConfig.JITSI_WATERMARK_LINK : '',
+                    ? interfaceConfig.JITSI_WATERMARK_LINK
+                    : "",
             showBrandWatermark,
             showJitsiWatermark,
             showJitsiWatermarkForGuests,
-            showPoweredBy: interfaceConfig.SHOW_POWERED_BY
+            showPoweredBy: interfaceConfig.SHOW_POWERED_BY,
         };
     }
 
@@ -120,15 +120,9 @@ class Watermarks extends Component<Props, State> {
     render() {
         return (
             <div>
-                {
-                    this._renderJitsiWatermark()
-                }
-                {
-                    this._renderBrandWatermark()
-                }
-                {
-                    this._renderPoweredBy()
-                }
+                {this._renderJitsiWatermark()}
+                {this._renderBrandWatermark()}
+                {this._renderPoweredBy()}
             </div>
         );
     }
@@ -145,18 +139,17 @@ class Watermarks extends Component<Props, State> {
         if (this.state.showBrandWatermark) {
             reactElement = (
                 <div
-                    className = 'watermark rightwatermark'
-                    style = { _RIGHT_WATERMARK_STYLE } />
+                    className="watermark rightwatermark"
+                    style={_RIGHT_WATERMARK_STYLE}
+                />
             );
 
             const { brandWatermarkLink } = this.state;
 
             if (brandWatermarkLink) {
                 reactElement = (
-                    <a
-                        href = { brandWatermarkLink }
-                        target = '_new'>
-                        { reactElement }
+                    <a href={brandWatermarkLink} target="_new">
+                        {reactElement}
                     </a>
                 );
             }
@@ -174,19 +167,25 @@ class Watermarks extends Component<Props, State> {
     _renderJitsiWatermark() {
         let reactElement = null;
 
-        if (this.state.showJitsiWatermark
-                || (this.props._isGuest
-                    && this.state.showJitsiWatermarkForGuests)) {
-            reactElement = <div className = 'watermark leftwatermark' />;
+        if (
+            this.state.showJitsiWatermark ||
+            (this.props._isGuest && this.state.showJitsiWatermarkForGuests)
+        ) {
+            reactElement = (
+                <div
+                    className="watermark leftwatermark"
+                    style={{
+                        backgroundImage: `url("${this.props.logoImgURL}")`,
+                    }}
+                />
+            );
 
             const { jitsiWatermarkLink } = this.state;
 
             if (jitsiWatermarkLink) {
                 reactElement = (
-                    <a
-                        href = { jitsiWatermarkLink }
-                        target = '_new'>
-                        { reactElement }
+                    <a href={jitsiWatermarkLink} target="_new">
+                        {reactElement}
                     </a>
                 );
             }
@@ -206,11 +205,8 @@ class Watermarks extends Component<Props, State> {
             const { t } = this.props;
 
             return (
-                <a
-                    className = 'poweredby'
-                    href = 'http://jitsi.org'
-                    target = '_new'>
-                    <span>{ t('poweredby') } jitsi.org</span>
+                <a className="poweredby" href="http://jitsi.org" target="_new">
+                    <span>{t("poweredby")} jitsi.org</span>
                 </a>
             );
         }
@@ -228,7 +224,7 @@ class Watermarks extends Component<Props, State> {
  * }}
  */
 function _mapStateToProps(state) {
-    const { isGuest } = state['features/base/jwt'];
+    const { isGuest } = state["features/base/jwt"];
 
     return {
         /**
@@ -238,7 +234,7 @@ function _mapStateToProps(state) {
          * @private
          * @type {boolean}
          */
-        _isGuest: isGuest
+        _isGuest: isGuest,
     };
 }
 

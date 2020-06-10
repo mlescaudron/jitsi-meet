@@ -1288,7 +1288,7 @@ class Toolbox extends Component<Props, State> {
                             tooltip = { t('toolbar.invite') } /> }
                     {
                         buttonsRight.indexOf('info') !== -1
-                            && <InfoDialogButton />
+                            && <InfoDialogButton  inviteURL={this.props.inviteURL} phoneNumber={this.props.phoneNumber} pin={this.props.pin} />
                     }
                     { buttonsRight.indexOf('overflowmenu') !== -1
                         && <OverflowMenuButton

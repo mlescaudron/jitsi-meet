@@ -1,28 +1,27 @@
 // @flow
 
-import InlineDialog from '@atlaskit/inline-dialog';
-import React, { Component } from 'react';
-import type { Dispatch } from 'redux';
+import InlineDialog from "@atlaskit/inline-dialog";
+import React, { Component } from "react";
+import type { Dispatch } from "redux";
 
-import { createToolbarEvent, sendAnalytics } from '../../../../analytics';
-import { openDialog } from '../../../../base/dialog';
-import { translate } from '../../../../base/i18n';
-import { IconInfo } from '../../../../base/icons';
-import { JitsiRecordingConstants } from '../../../../base/lib-jitsi-meet';
-import { getParticipantCount } from '../../../../base/participants';
-import { OverflowMenuItem } from '../../../../base/toolbox';
-import { connect } from '../../../../base/redux';
-import { getActiveSession } from '../../../../recording';
-import { ToolbarButton } from '../../../../toolbox';
-import { updateDialInNumbers } from '../../../actions';
+import { createToolbarEvent, sendAnalytics } from "../../../../analytics";
+import { openDialog } from "../../../../base/dialog";
+import { translate } from "../../../../base/i18n";
+import { IconInfo } from "../../../../base/icons";
+import { JitsiRecordingConstants } from "../../../../base/lib-jitsi-meet";
+import { getParticipantCount } from "../../../../base/participants";
+import { OverflowMenuItem } from "../../../../base/toolbox";
+import { connect } from "../../../../base/redux";
+import { getActiveSession } from "../../../../recording";
+import { ToolbarButton } from "../../../../toolbox";
+import { updateDialInNumbers } from "../../../actions";
 
-import InfoDialog from './InfoDialog';
+import InfoDialog from "./InfoDialog";
 
 /**
  * The type of the React {@code Component} props of {@link InfoDialogButton}.
  */
 type Props = {
-
     /**
      * The redux state representing the dial-in numbers feature.
      */
@@ -70,14 +69,13 @@ type Props = {
     /**
      * Invoked to obtain translated strings.
      */
-    t: Function
+    t: Function,
 };
 
 /**
  * The type of the React {@code Component} state of {@link InfoDialogButton}.
  */
 type State = {
-
     /**
      * Cache the conference connection state to derive when transitioning from
      * not joined to join, in order to auto-show the InfoDialog.
@@ -87,7 +85,7 @@ type State = {
     /**
      * Whether or not {@code InfoDialog} should be visible.
      */
-    showDialog: boolean
+    showDialog: boolean,
 };
 
 /**
@@ -105,12 +103,13 @@ class InfoDialogButton extends Component<Props, State> {
     static getDerivedStateFromProps(props, state) {
         return {
             hasConnectedToConference: props._isConferenceJoined,
-            showDialog: (props._toolboxVisible && state.showDialog)
-                || (!state.hasConnectedToConference
-                    && props._isConferenceJoined
-                    && props._isLonelyCall
-                    && props._toolboxVisible
-                    && !props._disableAutoShow)
+            showDialog:
+                (props._toolboxVisible && state.showDialog) ||
+                (!state.hasConnectedToConference &&
+                    props._isConferenceJoined &&
+                    props._isLonelyCall &&
+                    props._toolboxVisible &&
+                    !props._disableAutoShow),
         };
     }
 
@@ -124,14 +123,15 @@ class InfoDialogButton extends Component<Props, State> {
 
         this.state = {
             hasConnectedToConference: props._isConferenceJoined,
-            showDialog: false
+            showDialog: false,
         };
 
         // Bind event handlers so they are only bound once for every instance.
         this._onDialogClose = this._onDialogClose.bind(this);
         this._onDialogToggle = this._onDialogToggle.bind(this);
-        this._onClickOverflowMenuButton
-            = this._onClickOverflowMenuButton.bind(this);
+        this._onClickOverflowMenuButton = this._onClickOverflowMenuButton.bind(
+            this
+        );
     }
 
     /**
@@ -158,31 +158,38 @@ class InfoDialogButton extends Component<Props, State> {
         if (showLabel) {
             return (
                 <OverflowMenuItem
-                    accessibilityLabel = { t('info.accessibilityLabel') }
-                    icon = 'icon-info'
-                    key = 'info-button'
-                    onClick = { this._onClickOverflowMenuButton }
-                    text = { t('info.label') } />
+                    accessibilityLabel={t("info.accessibilityLabel")}
+                    icon="icon-info"
+                    key="info-button"
+                    onClick={this._onClickOverflowMenuButton}
+                    text={t("info.label")}
+                />
             );
         }
 
         return (
-            <div className = 'toolbox-button-wth-dialog'>
+            <div className="toolbox-button-wth-dialog">
                 <InlineDialog
-                    content = {
+                    content={
                         <InfoDialog
-                            dialIn = { _dialIn }
-                            isInlineDialog = { true }
-                            liveStreamViewURL = { _liveStreamViewURL }
-                            onClose = { this._onDialogClose } /> }
-                    isOpen = { showDialog }
-                    onClose = { this._onDialogClose }
-                    position = { 'top right' }>
+                            __inviteURL={this.props.inviteURL}
+                            __phoneNumber={this.props.phoneNumber}
+                            dialIn={_dialIn}
+                            isInlineDialog={true}
+                            liveStreamViewURL={_liveStreamViewURL}
+                            onClose={this._onDialogClose}
+                        />
+                    }
+                    isOpen={showDialog}
+                    onClose={this._onDialogClose}
+                    position={"top right"}
+                >
                     <ToolbarButton
-                        accessibilityLabel = { t('info.accessibilityLabel') }
-                        icon = { IconInfo }
-                        onClick = { this._onDialogToggle }
-                        tooltip = { t('info.tooltip') } />
+                        accessibilityLabel={t("info.accessibilityLabel")}
+                        icon={IconInfo}
+                        onClick={this._onDialogToggle}
+                        tooltip={t("info.tooltip")}
+                    />
                 </InlineDialog>
             </div>
         );
@@ -210,11 +217,13 @@ class InfoDialogButton extends Component<Props, State> {
     _onClickOverflowMenuButton() {
         const { _dialIn, _liveStreamViewURL } = this.props;
 
-        this.props.dispatch(openDialog(InfoDialog, {
-            dialIn: _dialIn,
-            liveStreamViewURL: _liveStreamViewURL,
-            isInlineDialog: false
-        }));
+        this.props.dispatch(
+            openDialog(InfoDialog, {
+                dialIn: _dialIn,
+                liveStreamViewURL: _liveStreamViewURL,
+                isInlineDialog: false,
+            })
+        );
     }
 
     _onDialogToggle: () => void;
@@ -226,7 +235,7 @@ class InfoDialogButton extends Component<Props, State> {
      * @returns {void}
      */
     _onDialogToggle() {
-        sendAnalytics(createToolbarEvent('info'));
+        sendAnalytics(createToolbarEvent("info"));
 
         this.setState({ showDialog: !this.state.showDialog });
     }
@@ -248,20 +257,23 @@ class InfoDialogButton extends Component<Props, State> {
  * }}
  */
 function _mapStateToProps(state) {
-    const currentLiveStreamingSession
-        = getActiveSession(state, JitsiRecordingConstants.mode.STREAM);
-    const { iAmRecorder, iAmSipGateway } = state['features/base/config'];
+    const currentLiveStreamingSession = getActiveSession(
+        state,
+        JitsiRecordingConstants.mode.STREAM
+    );
+    const { iAmRecorder, iAmSipGateway } = state["features/base/config"];
 
     return {
-        _dialIn: state['features/invite'],
+        _dialIn: state["features/invite"],
         _disableAutoShow: iAmRecorder || iAmSipGateway,
-        _isConferenceJoined:
-            Boolean(state['features/base/conference'].conference),
+        _isConferenceJoined: Boolean(
+            state["features/base/conference"].conference
+        ),
         _liveStreamViewURL:
-            currentLiveStreamingSession
-                && currentLiveStreamingSession.liveStreamViewURL,
+            currentLiveStreamingSession &&
+            currentLiveStreamingSession.liveStreamViewURL,
         _isLonelyCall: getParticipantCount(state) < 2,
-        _toolboxVisible: state['features/toolbox'].visible
+        _toolboxVisible: state["features/toolbox"].visible,
     };
 }
 
