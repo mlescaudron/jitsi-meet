@@ -1,35 +1,33 @@
 // @flow
 
-import React, { Component } from 'react';
-import type { Dispatch } from 'redux';
+import React, { Component } from "react";
+import type { Dispatch } from "redux";
 
-import { setPassword } from '../../../../base/conference';
-import { getInviteURL } from '../../../../base/connection';
-import { Dialog } from '../../../../base/dialog';
-import { translate } from '../../../../base/i18n';
-import { Icon, IconInfo, IconCopy } from '../../../../base/icons';
-import { connect } from '../../../../base/redux';
+import { setPassword } from "../../../../base/conference";
+import { getInviteURL } from "../../../../base/connection";
+import { Dialog } from "../../../../base/dialog";
+import { translate } from "../../../../base/i18n";
+import { Icon, IconInfo, IconCopy } from "../../../../base/icons";
+import { connect } from "../../../../base/redux";
 import {
     isLocalParticipantModerator,
-    getLocalParticipant
-} from '../../../../base/participants';
+    getLocalParticipant,
+} from "../../../../base/participants";
 
 import {
     _decodeRoomURI,
     _getDefaultPhoneNumber,
     getDialInfoPageURL,
-    shouldDisplayDialIn
-} from '../../../functions';
-import logger from '../../../logger';
-import DialInNumber from './DialInNumber';
-import PasswordForm from './PasswordForm';
-
+    shouldDisplayDialIn,
+} from "../../../functions";
+import logger from "../../../logger";
+import DialInNumber from "./DialInNumber";
+import PasswordForm from "./PasswordForm";
 
 /**
  * The type of the React {@code Component} props of {@link InfoDialog}.
  */
 type Props = {
-
     /**
      * Whether or not the current user can modify the current password.
      */
@@ -110,14 +108,13 @@ type Props = {
     /**
      * Invoked to obtain translated strings.
      */
-    t: Function
+    t: Function,
 };
 
 /**
  * The type of the React {@code Component} state of {@link InfoDialog}.
  */
 type State = {
-
     /**
      * Whether or not to show the password in editing mode.
      */
@@ -126,7 +123,7 @@ type State = {
     /**
      * The conference dial-in number to display.
      */
-    phoneNumber: ?string
+    phoneNumber: ?string,
 };
 
 /**
@@ -153,9 +150,11 @@ class InfoDialog extends Component<Props, State> {
 
         return {
             // Exit edit mode when a password is set locally or remotely.
-            passwordEditEnabled: state.passwordEditEnabled && props._password
-                ? false : state.passwordEditEnabled,
-            phoneNumber
+            passwordEditEnabled:
+                state.passwordEditEnabled && props._password
+                    ? false
+                    : state.passwordEditEnabled,
+            phoneNumber,
         };
     }
 
@@ -170,7 +169,7 @@ class InfoDialog extends Component<Props, State> {
      */
     state = {
         passwordEditEnabled: false,
-        phoneNumber: undefined
+        phoneNumber: undefined,
     };
 
     /**
@@ -183,8 +182,9 @@ class InfoDialog extends Component<Props, State> {
         super(props);
 
         if (props.dialIn && props.dialIn.numbers) {
-            this.state.phoneNumber
-                = _getDefaultPhoneNumber(props.dialIn.numbers);
+            this.state.phoneNumber = _getDefaultPhoneNumber(
+                props.dialIn.numbers
+            );
         }
 
         /**
@@ -203,8 +203,9 @@ class InfoDialog extends Component<Props, State> {
         this._onCopyInviteUrl = this._onCopyInviteUrl.bind(this);
         this._onPasswordRemove = this._onPasswordRemove.bind(this);
         this._onPasswordSubmit = this._onPasswordSubmit.bind(this);
-        this._onTogglePasswordEditState
-            = this._onTogglePasswordEditState.bind(this);
+        this._onTogglePasswordEditState = this._onTogglePasswordEditState.bind(
+            this
+        );
         this._setCopyElement = this._setCopyElement.bind(this);
         this._setCopyUrlElement = this._setCopyUrlElement.bind(this);
     }
@@ -220,77 +221,78 @@ class InfoDialog extends Component<Props, State> {
             isInlineDialog,
             liveStreamViewURL,
             onMouseOver,
-            t
+            t,
         } = this.props;
 
         const inlineDialog = (
-            <div
-                className = 'info-dialog'
-                onMouseOver = { onMouseOver } >
-                <div className = 'info-dialog-column'>
-                    <h4 className = 'info-dialog-icon'>
-                        <Icon src = { IconInfo } />
+            <div className="info-dialog" onMouseOver={onMouseOver}>
+                <div className="info-dialog-column">
+                    <h4 className="info-dialog-icon">
+                        <Icon src={IconInfo} />
                     </h4>
                 </div>
-                <div className = 'info-dialog-column'>
-                    <div className = 'info-dialog-title'>
-                        { t('info.title') }
-                    </div>
-                    <div className = 'info-dialog-conference-url'>
-                        <span className = 'info-label'>
-                            { t('info.conferenceURL') }
+                <div className="info-dialog-column">
+                    <div className="info-dialog-title">{t("info.title")}</div>
+                    <div className="info-dialog-conference-url">
+                        <span className="info-label">
+                            {t("info.conferenceURL")}
                         </span>
-                        <span className = 'spacer'>&nbsp;</span>
-                        <span className = 'info-value'>
+                        <span className="spacer">&nbsp;</span>
+                        <span className="info-value">
                             <a
-                                className = 'info-dialog-url-text info-dialog-url-text-unselectable'
-                                href = { this.props.__inviteURL }
-                                onClick = { this._onClickURLText } >
-                                { decodeURI(this._getURLToDisplay()) }
+                                className="info-dialog-url-text info-dialog-url-text-unselectable"
+                                href={this.props.__inviteURL}
+                                onClick={this._onClickURLText}
+                            >
+                                {decodeURI(this._getURLToDisplay())}
                             </a>
                         </span>
-                        <span className = 'info-dialog-url-icon'>
+                        <span className="info-dialog-url-icon">
                             <Icon
-                                onClick = { this._onCopyInviteUrl }
-                                size = { 18 }
-                                src = { IconCopy } />
+                                onClick={this._onCopyInviteUrl}
+                                size={18}
+                                src={IconCopy}
+                            />
                         </span>
                     </div>
-                    <div className = 'info-dialog-dial-in'>
-                        { this._renderDialInDisplay() }
+                    <div className="info-dialog-dial-in">
+                        {this._renderDialInDisplay()}
                     </div>
-                    { liveStreamViewURL && this._renderLiveStreamURL() }
-                    <div className = 'info-dialog-password'>
+                    {liveStreamViewURL && this._renderLiveStreamURL()}
+                    {/* <div className = 'info-dialog-password'>
                         <PasswordForm
                             editEnabled = { this.state.passwordEditEnabled }
                             locked = { this.props._locked }
                             onSubmit = { this._onPasswordSubmit }
                             password = { this.props._password }
                             passwordNumberOfDigits = { this.props._passwordNumberOfDigits } />
-                    </div>
-                    <div className = 'info-dialog-action-links'>
-                        <div className = 'info-dialog-action-link'>
+                    </div> */}
+                    <div className="info-dialog-action-links">
+                        <div className="info-dialog-action-link">
                             <a
-                                className = 'info-copy'
-                                onClick = { this._onCopyInviteInfo }>
-                                { t('dialog.copy') }
+                                className="info-copy"
+                                onClick={this._onCopyInviteInfo}
+                            >
+                                {t("dialog.copy")}
                             </a>
                         </div>
-                        { this._renderPasswordAction() }
+                        {this._renderPasswordAction()}
                     </div>
                 </div>
                 <textarea
-                    className = 'info-dialog-copy-element'
-                    readOnly = { true }
-                    ref = { this._setCopyElement }
-                    tabIndex = '-1'
-                    value = { this._getTextToCopy() } />
+                    className="info-dialog-copy-element"
+                    readOnly={true}
+                    ref={this._setCopyElement}
+                    tabIndex="-1"
+                    value={this._getTextToCopy()}
+                />
                 <textarea
-                    className = 'info-dialog-copy-element'
-                    readOnly = { true }
-                    ref = { this._setCopyUrlElement }
-                    tabIndex = '-1'
-                    value = { this.props._inviteURL } />
+                    className="info-dialog-copy-element"
+                    readOnly={true}
+                    ref={this._setCopyUrlElement}
+                    tabIndex="-1"
+                    value={this.props._inviteURL}
+                />
             </div>
         );
 
@@ -300,11 +302,12 @@ class InfoDialog extends Component<Props, State> {
 
         return (
             <Dialog
-                cancelTitleKey = 'dialog.close'
-                submitDisabled = { true }
-                titleKey = 'info.label'
-                width = 'small'>
-                { inlineDialog }
+                cancelTitleKey="dialog.close"
+                submitDisabled={true}
+                titleKey="info.label"
+                width="small"
+            >
+                {inlineDialog}
             </Dialog>
         );
     }
@@ -320,32 +323,34 @@ class InfoDialog extends Component<Props, State> {
         const _inviteURL = _decodeRoomURI(this.props._inviteURL);
 
         let invite = _localParticipantName
-            ? t('info.inviteURLFirstPartPersonal', { name: _localParticipantName })
-            : t('info.inviteURLFirstPartGeneral');
+            ? t("info.inviteURLFirstPartPersonal", {
+                  name: _localParticipantName,
+              })
+            : t("info.inviteURLFirstPartGeneral");
 
-        invite += t('info.inviteURLSecondPart', {
-            url: _inviteURL
+        invite += t("info.inviteURLSecondPart", {
+            url: _inviteURL,
         });
 
         if (liveStreamViewURL) {
-            const liveStream = t('info.inviteLiveStream', {
-                url: liveStreamViewURL
+            const liveStream = t("info.inviteLiveStream", {
+                url: liveStreamViewURL,
             });
 
             invite = `${invite}\n${liveStream}`;
         }
 
         if (shouldDisplayDialIn(this.props.dialIn)) {
-            const dial = t('info.invitePhone', {
+            const dial = t("info.invitePhone", {
                 number: this.state.phoneNumber,
-                conferenceID: this.props.dialIn.conferenceID
+                conferenceID: this.props.dialIn.conferenceID,
             });
-            const moreNumbers = t('info.invitePhoneAlternatives', {
+            const moreNumbers = t("info.invitePhoneAlternatives", {
                 url: getDialInfoPageURL(
                     this.props._conferenceName,
                     this.props._locationURL
                 ),
-                silentUrl: `${_inviteURL}#config.startSilent=true`
+                silentUrl: `${_inviteURL}#config.startSilent=true`,
             });
 
             invite = `${invite}\n${dial}\n${moreNumbers}`;
@@ -361,7 +366,7 @@ class InfoDialog extends Component<Props, State> {
      * @returns {string}
      */
     _getURLToDisplay() {
-        return this.props._inviteURL.replace(/^https?:\/\//i, '');
+        return this.props._inviteURL.replace(/^https?:\/\//i, "");
     }
 
     _onClickURLText: (Object) => void;
@@ -392,14 +397,14 @@ class InfoDialog extends Component<Props, State> {
     _onCopyInviteInfo() {
         try {
             if (!this._copyElement) {
-                throw new Error('No element to copy from.');
+                throw new Error("No element to copy from.");
             }
 
             this._copyElement && this._copyElement.select();
-            document.execCommand('copy');
+            document.execCommand("copy");
             this._copyElement && this._copyElement.blur();
         } catch (err) {
-            logger.error('error when copying the text', err);
+            logger.error("error when copying the text", err);
         }
     }
 
@@ -414,14 +419,14 @@ class InfoDialog extends Component<Props, State> {
     _onCopyInviteUrl() {
         try {
             if (!this._copyUrlElement) {
-                throw new Error('No element to copy from.');
+                throw new Error("No element to copy from.");
             }
 
             this._copyUrlElement && this._copyUrlElement.select();
-            document.execCommand('copy');
+            document.execCommand("copy");
             this._copyUrlElement && this._copyUrlElement.blur();
         } catch (err) {
-            logger.error('error when copying the text', err);
+            logger.error("error when copying the text", err);
         }
     }
 
@@ -434,7 +439,7 @@ class InfoDialog extends Component<Props, State> {
      * @returns {void}
      */
     _onPasswordRemove() {
-        this._onPasswordSubmit('');
+        this._onPasswordSubmit("");
     }
 
     _onPasswordSubmit: (string) => void;
@@ -450,11 +455,9 @@ class InfoDialog extends Component<Props, State> {
     _onPasswordSubmit(enteredPassword) {
         const { _conference } = this.props;
 
-        this.props.dispatch(setPassword(
-            _conference,
-            _conference.lock,
-            enteredPassword
-        ));
+        this.props.dispatch(
+            setPassword(_conference, _conference.lock, enteredPassword)
+        );
     }
 
     _onTogglePasswordEditState: () => void;
@@ -468,7 +471,7 @@ class InfoDialog extends Component<Props, State> {
      */
     _onTogglePasswordEditState() {
         this.setState({
-            passwordEditEnabled: !this.state.passwordEditEnabled
+            passwordEditEnabled: !this.state.passwordEditEnabled,
         });
     }
 
@@ -483,23 +486,22 @@ class InfoDialog extends Component<Props, State> {
         if (!shouldDisplayDialIn(this.props.dialIn)) {
             return null;
         }
-
         return (
             <div>
                 <DialInNumber
-                    conferenceID = { this.props.__pin }
-                    phoneNumber = { this.props.__phoneNumber } />
+                    conferenceID={this.props.__pin || ""}
+                    phoneNumber={this.props.__phoneNumber || ""}
+                />
                 <a
-                    className = 'more-numbers'
-                    href = {
-                        getDialInfoPageURL(
-                            this.props._conferenceName,
-                            this.props._locationURL
-                        )
-                    }
-                    rel = 'noopener noreferrer'
-                    target = '_blank'>
-                    { this.props.t('info.moreNumbers') }
+                    className="more-numbers"
+                    href={getDialInfoPageURL(
+                        this.props._conferenceName,
+                        this.props._locationURL
+                    )}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
+                    {this.props.t("info.moreNumbers")}
                 </a>
             </div>
         );
@@ -515,32 +517,29 @@ class InfoDialog extends Component<Props, State> {
         const { t } = this.props;
         let className, onClick, textKey;
 
-
         if (!this.props._canEditPassword) {
             // intentionally left blank to prevent rendering anything
         } else if (this.state.passwordEditEnabled) {
-            className = 'cancel-password';
+            className = "cancel-password";
             onClick = this._onTogglePasswordEditState;
-            textKey = 'info.cancelPassword';
+            textKey = "info.cancelPassword";
         } else if (this.props._locked) {
-            className = 'remove-password';
+            className = "remove-password";
             onClick = this._onPasswordRemove;
-            textKey = 'dialog.removePassword';
+            textKey = "dialog.removePassword";
         } else {
-            className = 'add-password';
+            className = "add-password";
             onClick = this._onTogglePasswordEditState;
-            textKey = 'info.addPassword';
+            textKey = "info.addPassword";
         }
 
-        return className && onClick && textKey
-            ? <div className = 'info-dialog-action-link'>
-                <a
-                    className = { className }
-                    onClick = { onClick }>
-                    { t(textKey) }
+        return className && onClick && textKey ? (
+            <div className="info-dialog-action-link">
+                <a className={className} onClick={onClick}>
+                    {t(textKey)}
                 </a>
             </div>
-            : null;
+        ) : null;
     }
 
     /**
@@ -554,17 +553,16 @@ class InfoDialog extends Component<Props, State> {
         const { liveStreamViewURL, t } = this.props;
 
         return (
-            <div className = 'info-dialog-live-stream-url'>
-                <span className = 'info-label'>
-                    { t('info.liveStreamURL') }
-                </span>
-                <span className = 'spacer'>&nbsp;</span>
-                <span className = 'info-value'>
+            <div className="info-dialog-live-stream-url">
+                <span className="info-label">{t("info.liveStreamURL")}</span>
+                <span className="spacer">&nbsp;</span>
+                <span className="info-value">
                     <a
-                        className = 'info-dialog-url-text'
-                        href = { liveStreamViewURL }
-                        onClick = { this._onClickURLText } >
-                        { liveStreamViewURL }
+                        className="info-dialog-url-text"
+                        href={liveStreamViewURL}
+                        onClick={this._onClickURLText}
+                    >
+                        {liveStreamViewURL}
                     </a>
                 </span>
             </div>
@@ -620,24 +618,25 @@ class InfoDialog extends Component<Props, State> {
  * }}
  */
 function _mapStateToProps(state) {
-    const {
-        conference,
-        locked,
-        password,
-        room
-    } = state['features/base/conference'];
+    const { conference, locked, password, room } = state[
+        "features/base/conference"
+    ];
     const localParticipant = getLocalParticipant(state);
 
     return {
-        _canEditPassword: isLocalParticipantModerator(state, state['features/base/config'].lockRoomGuestEnabled),
+        _canEditPassword: isLocalParticipantModerator(
+            state,
+            state["features/base/config"].lockRoomGuestEnabled
+        ),
         _conference: conference,
         _conferenceName: room,
-        _passwordNumberOfDigits: state['features/base/config'].roomPasswordNumberOfDigits,
+        _passwordNumberOfDigits:
+            state["features/base/config"].roomPasswordNumberOfDigits,
         _inviteURL: getInviteURL(state),
         _localParticipantName: localParticipant?.name,
-        _locationURL: state['features/base/connection'].locationURL,
+        _locationURL: state["features/base/connection"].locationURL,
         _locked: locked,
-        _password: password
+        _password: password,
     };
 }
 

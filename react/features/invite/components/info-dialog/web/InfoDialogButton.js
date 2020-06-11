@@ -174,6 +174,7 @@ class InfoDialogButton extends Component<Props, State> {
                         <InfoDialog
                             __inviteURL={this.props.inviteURL}
                             __phoneNumber={this.props.phoneNumber}
+                            __pin={this.props.pin}
                             dialIn={_dialIn}
                             isInlineDialog={true}
                             liveStreamViewURL={_liveStreamViewURL}
